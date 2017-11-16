@@ -15,7 +15,56 @@ var server = app.listen(3200, function () {
 app.post("/graph", function(req, res) {
 	var series = [];
 	var timespan = [];
-	//filling timespan array
+
+	// var justOnce = 1;
+
+	// for (var key in req.body.series){
+	// 	if(req.body.hasOwnProperty(key)){
+	// 		var values = []
+	// 		for(var innerkey in req.body[key]){
+	// 			if (req.body[key].hasOwnProperty(innerkey)) {
+	// 				if (justOnce == 1){
+	// 					timespan.push(innerkey);
+	// 				}
+	// 				values.push(req.body[key][innerkey]);
+	// 			}
+	// 		}	
+
+	// 		var color = chartColors[Math.floor(Math.random()*8)];
+	// 		series.push(	
+	// 			{
+	// 				label: key,
+	// 				fill: false,
+ //                    backgroundColor: color,
+ //                    borderColor: color,
+	// 				data: values
+	// 			}
+	// 		)
+	// 		justOnce = 0;
+	// 	}
+	// }
+
+	// if (req.body.hasOwnProperty('threshold') && req.body.threshold !== null){
+	// 	var color = chartColors[Math.floor(Math.random()*8)];
+	// 	var thresholdArray = [];
+	// 	thresholdArray.length = values.length
+	// 	thresholdArray.fill(serie.threshold);
+	// 	series.push(
+	// 		{
+	// 			label: 'threshold',
+	// 			fill: false,
+ //                backgroundColor: color,
+ //                borderColor: color,
+	// 			data: thresholdArray	
+	// 		}
+	// 	)
+	// }
+	// console.log(timespan)
+
+	// console.log(series)
+	
+
+	// filling timespan array
 	req.body.series[0].datapoints.forEach(timestamp => timespan.push(timestamp[1]));
 	
 	//getting data for each serie and adding the whole json in an array
@@ -23,19 +72,20 @@ app.post("/graph", function(req, res) {
 			var values = [];
 			serie.datapoints.forEach(datapoint => values.push(datapoint[0]));
 			
-			// TODO: automatically assign colors
+			var color = chartColors[Math.floor(Math.random()*8)];
 			series.push(	
 				{
 					label: serie.name,
 					fill: false,
-                    backgroundColor: chartColors[Math.floor(Math.random()*8)],
-                    borderColor: chartColors[Math.floor(Math.random()*8)],
+                    backgroundColor: color,
+                    borderColor: color,
 					data: values
 				}
 			)
 
 			// this needs to have the same collor if exists
-			if (serie.threshold !== null) { 
+			if (serie.threshold !== null) {
+				color = chartColors[Math.floor(Math.random()*8)];
 				var thresholdArray = [];
 				thresholdArray.length = values.length
 				thresholdArray.fill(serie.threshold);
@@ -43,8 +93,8 @@ app.post("/graph", function(req, res) {
 					{
 						label: 'threshold',
 						fill: false,
-	                    backgroundColor: chartColors[Math.floor(Math.random()*8)],
-	                    borderColor: chartColors[Math.floor(Math.random()*8)],
+	                    backgroundColor: color,
+	                    borderColor: color,
 						data: thresholdArray	
 					}
 				)
