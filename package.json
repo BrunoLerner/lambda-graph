@@ -2,7 +2,7 @@
   "name": "lambda-graph",
   "version": "1.0.0",
   "description": "generates png of a graph from a json and post it in S3",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
