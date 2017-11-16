@@ -15,7 +15,7 @@ var myChartOptions = {
     tooltips: {
         mode: 'index',
         intersect: false,
-        position:''
+        bodyFontSize: 2
     },
     hover: {
         mode: 'nearest',
@@ -54,34 +54,20 @@ var createGraph = function(timespan, series){
                 var ctx = chart.chart.ctx;  /* Canvas context used to draw with */
                 ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, chart.chart.width, chart.chart.height);
-                if (chart.tooltip._active == undefined) {
-                    chart.tooltip._active = [];
-                }
-                var activeElements = chart.tooltip._active;
-                var requestedElem = chart.getDatasetMeta(0).data[3];
-                for(var i = 0; i < activeElements.length; i++) {
-                    if(requestedElem._index == activeElements[i]._index)  
-                       return;
-                }
-                activeElements.push(requestedElem);
-                chart.tooltip._active = activeElements;
             },
             afterDraw: function (chart, easing) {
-                console.log(chart.tooltips)
-                var ctx = chart.chart.ctx;  /* Canvas context used to draw with */
                 if (chart.tooltip._active == undefined) {
                     chart.tooltip._active = [];
                 }
                 var activeElements = chart.tooltip._active;
-                var requestedElem = chart.getDatasetMeta(0).data[3];
+                var requestedElem = chart.getDatasetMeta(1).data[3];
                 for(var i = 0; i < activeElements.length; i++) {
                     if(requestedElem._index == activeElements[i]._index)  
                        return;
                 }
                 activeElements.push(requestedElem);
-                console.log(activeElements)
                 chart.tooltip._active = activeElements;
-                chart.tooltips.update(true);
+                chart.tooltip.update(true);
                 chart.draw();
             }
         }    
@@ -98,6 +84,8 @@ var createGraph = function(timespan, series){
     .then(buffer => {
         Array.isArray(buffer) // => true
         // as a stream
+
+
         return chartNode.getImageStream('image/png');
     })
     .then(streamResult => {
