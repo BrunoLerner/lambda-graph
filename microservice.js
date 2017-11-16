@@ -4,18 +4,18 @@ const ChartjsNode = require('chartjs-node'),
 var s3 = new AWS.S3();
 
 // 600x600 canvas size
-var chartNode = new ChartjsNode(600, 600);
+var chartNode = new ChartjsNode(400, 250);
 
 var myChartOptions = {
     responsive: true,
     title:{
-        display:true,
-        text:'Loom\'s Alert'
+        display:false
     },
     tooltips: {
         mode: 'index',
         intersect: false,
-        bodyFontSize: 2
+        bodyFontSize: 1,
+        yPadding:10
     },
     hover: {
         mode: 'nearest',
@@ -95,12 +95,12 @@ var createGraph = function(timespan, series){
         streamResult.stream // => Stream object
         streamResult.length // => Integer length of stream
 
-        var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream};
-        // return s3.upload(params, function(err, data) {
-        //     console.log(err, data);
-        //  });
+        var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream, ContentType:'image/png'};
+        return s3.upload(params, function(err, data) {
+            console.log(err, data);
+         });
         // write to a file
-        return chartNode.writeImageToFile('image/png', './testimage.png');
+        // return chartNode.writeImageToFile('image/png', './testimage.png');
     })
     .then((s3Result) => {
         console.log(s3Result)

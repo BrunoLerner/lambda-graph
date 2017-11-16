@@ -15,53 +15,55 @@ var server = app.listen(3200, function () {
 app.post("/graph", function(req, res) {
 	var series = [];
 	var timespan = [];
-
 	// var justOnce = 1;
+	
+ // 	var payload = JSON.parse(req.body.payload);
+ //    var in_series = payload.series;
+    
+ //    for (var key in in_series){
+ //        if (in_series.hasOwnProperty(key)){
+ //            var values = []
+ //            for (var innerkey in in_series[key]){
+ //                if (in_series[key].hasOwnProperty(innerkey)) {
+ //                    if (justOnce == 1){
+ //                        timespan.push(innerkey);
+ //                    }
+ //                    values.push(in_series[key][innerkey]);
+ //                }
+ //            }    
 
-	// for (var key in req.body.series){
-	// 	if(req.body.series.hasOwnProperty(key)){
-	// 		var values = []
-	// 		for(var innerkey in req.body.series[key]){
-	// 			if (req.body.series[key].hasOwnProperty(innerkey)) {
-	// 				if (justOnce == 1){
-	// 					timespan.push(innerkey);
-	// 				}
-	// 				values.push(req.body.series[key][innerkey]);
-	// 			}
-	// 		}	
+ //            var color = chartColors[Math.floor(Math.random()*8)];
+ //            series.push(    
+ //                {
+ //                    label: key,
+ //                    fill: false,
+ //                   backgroundColor: color,
+ //                   borderColor: color,
+ //                    data: values
+ //                }
+ //            )
+ //            justOnce = 0;
+ //        }
+ //    }
 
-	// 		var color = chartColors[Math.floor(Math.random()*6)];
-	// 		series.push(	
-	// 			{
-	// 				label: key,
-	// 				fill: false,
- //                    backgroundColor: color,
- //                    borderColor: color,
-	// 				data: values
-	// 			}
-	// 		)
-	// 		justOnce = 0;
-	// 	}
-	// }
+ //    if (payload.hasOwnProperty('threshold') && payload.threshold !== null){
+ //        var color = chartColors[Math.floor(Math.random()*8)];
+ //        var thresholdArray = [];
+ //        thresholdArray.length = values.length
+ //        thresholdArray.fill(series.threshold);
+ //        series.push(
+ //            {
+ //                label: 'threshold',
+ //                fill: false,
+ //               backgroundColor: color,
+ //               borderColor: color,
+ //                data: thresholdArray    
+ //            }
+ //        )
+ //    }
+ //    console.log(timespan)
 
-	// if (req.body.hasOwnProperty('threshold') && req.body.threshold !== null){
-	// 	var color = chartColors[Math.floor(Math.random()*6)];
-	// 	var thresholdArray = [];
-	// 	thresholdArray.length = values.length
-	// 	thresholdArray.fill(serie.threshold);
-	// 	series.push(
-	// 		{
-	// 			label: 'threshold',
-	// 			fill: false,
- //                backgroundColor: color,
- //                borderColor: color,
-	// 			data: thresholdArray	
-	// 		}
-	// 	)
-	// }
-	// console.log(timespan)
-
-	// console.log(series)
+ //    console.log(series)
 	
 
 	// filling timespan array

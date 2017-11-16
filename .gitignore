@@ -1,0 +1,9 @@
+// idea conf
+*.idea
+
+//test images
+*.png
+*.jpg
+
+//sample json
+samplejson.json
