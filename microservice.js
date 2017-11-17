@@ -40,7 +40,7 @@ var myChartOptions = {
 }   
 
 
-var createGraph = function(timespan, series){
+var createGraph = function(timespan, series, annotationPosition){
     var chartJsOptions = {
         type: 'line',
         data:{
@@ -49,18 +49,22 @@ var createGraph = function(timespan, series){
         },
         options: myChartOptions,
         plugins:{
+
+            //draws the background
             beforeDraw: function (chart, easing) {
                 var self = chart.config;    /* Configuration object containing type, data, options */
                 var ctx = chart.chart.ctx;  /* Canvas context used to draw with */
                 ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, chart.chart.width, chart.chart.height);
             },
+
+            //active the tooltip
             afterDraw: function (chart, easing) {
                 if (chart.tooltip._active == undefined) {
                     chart.tooltip._active = [];
                 }
                 var activeElements = chart.tooltip._active;
-                var requestedElem = chart.getDatasetMeta(1).data[3];
+                var requestedElem = chart.getDatasetMeta(annotationPosition.dataset).data[annotationPosition.peakPoint];
                 for(var i = 0; i < activeElements.length; i++) {
                     if(requestedElem._index == activeElements[i]._index)  
                        return;
