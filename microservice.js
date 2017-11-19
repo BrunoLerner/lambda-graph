@@ -2,10 +2,7 @@ const ChartjsNode = require('chartjs-node'),
     AWS = require('aws-sdk');
 
 var s3 = new AWS.S3();
-
-// 600x600 canvas size
 var chartNode = new ChartjsNode(400, 250);
-
 var myChartOptions = {
     responsive: true,
     title:{
@@ -14,7 +11,9 @@ var myChartOptions = {
     tooltips: {
         mode: 'index',
         intersect: false,
-        bodyFontSize: 1,
+        bodyFontSize: 0,
+        titleMarginBottom:1,
+        xPadding: 10,
         yPadding:10
     },
     hover: {
@@ -23,6 +22,13 @@ var myChartOptions = {
     },
     scales: {
         xAxes: [{
+            type:'time',
+            time: {
+                unit: 'hour',
+                displayFormats: {
+                    hour: 'h:mm a'
+                }
+            },
             display: true,
             scaleLabel: {
                 display: true,
@@ -40,7 +46,7 @@ var myChartOptions = {
 }   
 
 
-var createGraph = function(timespan, series, annotationPosition){
+var createGraph = function(timespan, series, annotationPosition, callback) {
     var chartJsOptions = {
         type: 'line',
         data:{
@@ -79,36 +85,27 @@ var createGraph = function(timespan, series, annotationPosition){
 
     return chartNode.drawChart(chartJsOptions)
     .then(() => {
-        // chart is created
         console.log('chart created')
-        // chartNode.addHitRegion()
+   
         // get image as png buffer
         return chartNode.getImageBuffer('image/png');
     })
     .then(buffer => {
-        Array.isArray(buffer) // => true
-        // as a stream
-
-
+        Array.isArray(buffer) 
         return chartNode.getImageStream('image/png');
     })
     .then(streamResult => {
-        // using the length property you can do things like
-        // directly upload the image to s3 by using the
-        // stream and length properties
-        streamResult.stream // => Stream object
-        streamResult.length // => Integer length of stream
-
         var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream, ContentType:'image/png'};
         return s3.upload(params, function(err, data) {
-            console.log(err, data);
+            if (err !== null){
+                console.log(err);
+            }
+            var url = data.Location;
+            callback(url);
          });
         // write to a file
         // return chartNode.writeImageToFile('image/png', './testimage.png');
-    })
-    .then((s3Result) => {
-        console.log(s3Result)
-    });    
+    });
 }
 
 function generateFileName() {
@@ -122,3 +119,4 @@ function generateFileName() {
 }
 
 module.exports = createGraph;
+
