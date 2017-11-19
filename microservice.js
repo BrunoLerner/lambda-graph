@@ -28,6 +28,9 @@ var myChartOptions = {
                     minute: 'h:mm a'
                 }
             },
+            ticks: {
+                source: 'labels'
+            },
             display: true,
             scaleLabel: {
                 display: true,

@@ -1,4 +1,3 @@
-
 const express = require("express"),
 	bodyParser = require("body-parser"),
 	graphService = require('./microservice');
@@ -20,23 +19,21 @@ app.post("/graph", function(req, res) {
 		promises = [];
 
 	for (var alertId in content) {
-		var series = [];
-		var timespan = [];
-		var justOnce = 1; // get timespan array (just need to get it in one of the iterations over the JSON)
-		
-	 	var payload = content[alertId];
-	    var in_series = payload.series;
+		var series = [],
+			timespan = [],
+			justOnce = 1,
+			payload = content[alertId],
+			in_series = payload.series;
 	    
 	    for (var key in in_series){
 	        if (in_series.hasOwnProperty(key)){
-
-	            var values = []
+	            var values = [];
 	            for (var innerkey in in_series[key]){
 	                if (in_series[key].hasOwnProperty(innerkey)) {
 	                    if (justOnce == 1){
 	                        timespan.push(innerkey);
-	                    }
-	                    values.push(in_series[key][innerkey]);
+						}
+						values.push(in_series[key][innerkey]);
 	                }
 	            }    
 
@@ -107,9 +104,6 @@ app.post("/graph", function(req, res) {
 
 	Promise.all(promises).then(function (resp, err) {
 		resp.forEach(result => response[result.alertId]=result.url)
-		res.send(response)
+		res.send(response);
 	})
 });
-
-
-
