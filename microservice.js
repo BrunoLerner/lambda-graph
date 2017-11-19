@@ -23,9 +23,9 @@ var myChartOptions = {
         xAxes: [{
             type:'time',
             time: {
-                unit: 'hour',
+                unit: 'minute',
                 displayFormats: {
-                    hour: 'h:mm a'
+                    minute: 'h:mm a'
                 }
             },
             display: true,
