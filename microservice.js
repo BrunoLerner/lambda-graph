@@ -2,7 +2,6 @@ const ChartjsNode = require('chartjs-node'),
     AWS = require('aws-sdk');
 
 var s3 = new AWS.S3();
-var chartNode = new ChartjsNode(400, 250);
 var myChartOptions = {
     responsive: true,
     title:{
@@ -83,29 +82,30 @@ var createGraph = function(timespan, series, annotationPosition, callback) {
         }    
     }
 
+    var chartNode = new ChartjsNode(400, 250);
     return chartNode.drawChart(chartJsOptions)
-    .then(() => {
-        console.log('chart created')
-   
-        // get image as png buffer
-        return chartNode.getImageBuffer('image/png');
-    })
-    .then(buffer => {
-        Array.isArray(buffer) 
-        return chartNode.getImageStream('image/png');
-    })
-    .then(streamResult => {
-        var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream, ContentType:'image/png'};
-        return s3.upload(params, function(err, data) {
-            if (err !== null){
-                console.log(err);
-            }
-            var url = data.Location;
-            callback(url);
-         });
-        // write to a file
-        // return chartNode.writeImageToFile('image/png', './testimage.png');
-    });
+        .then(() => {
+            console.log('chart created')
+    
+            // get image as png buffer
+            return chartNode.getImageBuffer('image/png');
+        })
+        .then(buffer => {
+            Array.isArray(buffer) 
+            return chartNode.getImageStream('image/png');
+        })
+        .then(streamResult => {
+            var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream, ContentType:'image/png'};
+            return s3.upload(params, function(err, data) {
+                if (err !== null){
+                    console.log(err);
+                }
+                var url = data.Location;
+                callback(url);
+            });
+            // write to a file
+            // return chartNode.writeImageToFile('image/png', './testimage.png');
+        });
 }
 
 function generateFileName() {

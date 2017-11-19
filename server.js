@@ -52,15 +52,13 @@ app.post("/graph", function(req, res) {
 	            	color = chartColors[1];
 	            }
 
-	            series.push(    
-	                {
+	            series.push({
 	                    label: seriesName,
 	                    fill: false,
 	                   	backgroundColor: color,
 	                   	borderColor: color,
 	                    data: values
-	                }
-	            )
+	                });
 	            justOnce = 0;
 	        }
 	    }
@@ -88,21 +86,26 @@ app.post("/graph", function(req, res) {
 	    //timespan is in seconds
 	    timespan = timespan.map(x => x*1000);
 		
-		//creates the graph
-		var promise = new Promise(function (resolve, reject) {
-			graphService(timespan, series, annotationPosition, function (innerRes, innerErr) {
-				resolve({
-					url: innerRes,
-					alertId: alertId
+		function createPromisse(xAxis, data, position, Id) {
+			return new Promise(function (resolve, reject) {
+				graphService(xAxis, data, position, function (innerRes, innerErr) {
+					if (innerRes !== null) {
+						resolve({
+							url: innerRes,
+							alertId: Id
+						});
+					} else {
+						reject();
+					}				
 				});
-				// TODO: handle errors and reject
-			});
-		});
+			}); 
+		}
+		//create promisse array of graph
+		var promise = createPromisse(timespan, series, annotationPosition, alertId)
 		promises.push(promise);
 	}
 
 	Promise.all(promises).then(function (resp, err) {
-		console.log(resp)
 		resp.forEach(result => response[result.alertId]=result.url)
 		res.send(response)
 	})
