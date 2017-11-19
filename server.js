@@ -40,15 +40,15 @@ app.post("/graph", function(req, res) {
 	                }
 	            }    
 
-	            var seriesName = '', 
+	            var seriesName = key, 
 	            	color = chartColors[0];
 
 	            if (key == 'lastHourSeries'){
-	            	seriesName = 'Current'
+	            	seriesName = 'Current';
 	            	color = chartColors[2];
 	            }
-	            else if (key == 'lastDaySeries'){
-	            	seriesName = 'Last Day'
+	            else if (key == 'prevDaySeries'){
+	            	seriesName = 'Last Day';
 	            	color = chartColors[1];
 	            }
 
