@@ -3,6 +3,12 @@ const ChartjsNode = require('chartjs-node'),
 
 var s3 = new AWS.S3();
 var myChartOptions = {
+    legend: {
+        labels: {
+            fontColor: "rgba(0, 0, 0, 1)",
+            fontSize: 12
+        }
+    },
     elements:{ point: { radius: 0 } },
     responsive: true,
     title:{
@@ -30,19 +36,30 @@ var myChartOptions = {
                 }
             },
             ticks: {
-                source: 'labels'
+                source: 'labels',
+                fontColor: 'rgba(0, 0, 0, 1)',
+                fontSize: 12
             },
             display: true,
             scaleLabel: {
                 display: true,
-                labelString: 'Time'
+                labelString: 'Time',
+                fontColor: 'rgba(0, 0, 0, 1)',
+                fontSize: 12
             }
         }],
         yAxes: [{
             display: true,
             scaleLabel: {
                 display: true,
-                labelString: 'Value'
+                labelString: 'Value',
+                fontColor: 'rgba(0, 0, 0, 1)',
+                fontSize: 12
+            },
+            ticks: {
+                source: 'labels',
+                fontColor: 'rgba(0, 0, 0, 1)',
+                fontSize: 12
             }
         }]
     } 
@@ -61,12 +78,12 @@ var createGraph = function(timespan, series, annotationPosition, callback) {
         plugins:{
 
             //draws the background
-            beforeDraw: function (chart, easing) {
-                var self = chart.config;    /* Configuration object containing type, data, options */
-                var ctx = chart.chart.ctx;  /* Canvas context used to draw with */
-                ctx.fillStyle = "white";
-                ctx.fillRect(0, 0, chart.chart.width, chart.chart.height);
-            },
+            // beforeDraw: function (chart, easing) {
+            //     var self = chart.config;    /* Configuration object containing type, data, options */
+            //     var ctx = chart.chart.ctx;  /* Canvas context used to draw with */
+            //     ctx.fillStyle = "white";
+            //     ctx.fillRect(0, 0, chart.chart.width, chart.chart.height);
+            // },
 
             //active the tooltip
             afterDraw: function (chart, easing) {

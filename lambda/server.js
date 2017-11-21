@@ -1,7 +1,7 @@
 const bodyParser = require("body-parser"),
 	graphService = require('./microservice');
 
-chartColors = ['rgb(255, 205, 86)','rgb(54, 162, 235)','rgb(255, 0, 0)']
+chartColors = ['rgb(255, 205, 86)','rgb(54, 162, 235)','rgb(255, 0, 0)','rgba(255, 205, 87, 0.5)','rgba(54, 162, 236,0.5)']
 
 exports.handler = (event, context, callback) => {
 	process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/lib';
@@ -51,21 +51,24 @@ exports.handler = (event, context, callback) => {
 	            thresholdSize = values.length;   
 
 	            var seriesName = key, 
-	            	color = chartColors[0];
+	            	color = chartColors[0],
+	            	backgroundColor = chartColors[3];
 
 	            if (key == 'lastHourSeries'){
 	            	seriesName = 'Current';
 	            	color = chartColors[1];
+	            	backgroundColor = chartColors[4]
 	            }
 	            else if (key == 'prevDaySeries'){
 	            	seriesName = 'Last Day';
 	            	color = chartColors[0];
+	            	backgroundColor = chartColors[3]
 	            }
 
 	            series.push({
 	                    label: seriesName,
-	                    fill: false,
-	                   	backgroundColor: color,
+	                    fill: true,
+	                   	backgroundColor: backgroundColor,
 	                   	borderColor: color,
 	                    data: values
 	                });
