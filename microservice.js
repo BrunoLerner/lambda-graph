@@ -98,16 +98,16 @@ var createGraph = function(timespan, series, annotationPosition, callback) {
             return chartNode.getImageStream('image/png');
         })
         .then(streamResult => {
-            var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream, ContentType:'image/png'};
-            return s3.upload(params, function(err, data) {
-                if (err !== null){
-                    console.log(err);
-                }
-                var url = data.Location;
-                callback(url);
-            });
+            // var params = {Bucket: 'loom-images',Key: generateFileName(), Body: streamResult.stream, ContentType:'image/png'};
+            // return s3.upload(params, function(err, data) {
+            //     if (err !== null){
+            //         console.log(err);
+            //     }
+            //     var url = data.Location;
+            //     callback(url);
+            // });
             // write to a file
-            // return chartNode.writeImageToFile('image/png', './testimage.png');
+            return chartNode.writeImageToFile('image/png', './testimage.png');
         });
 }
 

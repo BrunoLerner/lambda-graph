@@ -12,7 +12,7 @@ var myChartOptions = {
         intersect: false,
         bodyFontSize: 0,
         titleMarginBottom:1,
-        xPadding: 10,
+        xPadding: 8,
         yPadding:10
     },
     hover: {
@@ -49,6 +49,7 @@ var myChartOptions = {
 
 
 var createGraph = function(timespan, series, annotationPosition, callback) {
+    // console.log('And if we are here, it means that the graph service was called')
     var chartJsOptions = {
         type: 'line',
         data:{

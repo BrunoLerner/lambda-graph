@@ -4,16 +4,37 @@ const bodyParser = require("body-parser"),
 chartColors = ['rgb(255, 205, 86)','rgb(54, 162, 235)']
 
 exports.handler = (event, context, callback) => {
-	var response = {},
-		content = event.body,
-		promises = [];
+	process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/lib';
+	process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/lib';
+	process.env['PKG_CONFIG_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/lib';
+	var content = event.body,
+		promises = [],
+		responseBody = {};
 
+	console.log('This is the raw event');
+	console.log(event);
+
+	console.log('This is the raw event body');
+	console.log(event.body);
+
+	try{
+		console.log('This is the event body parsed');
+		content = JSON.parse(content);
+		console.log('The parsing worked..' + content);
+	}catch(e){ 
+		console.log(e);
+	}
+	
+	console.log("This is the content inside the alertId: " + content['1998247246']);
 	for (var alertId in content) {
+		// console.log(alertId)
+		// console.log('If we are here, it means that we entered the json loop')
 		var series = [],
 			timespan = [],
 			justOnce = 1,
 			payload = content[alertId],
-			in_series = payload.series;
+			in_series = payload.series,
+			thresholdSize = 0;
 	    
 	    for (var key in in_series){
 	        if (in_series.hasOwnProperty(key)){
@@ -25,7 +46,9 @@ exports.handler = (event, context, callback) => {
 						}
 						values.push(in_series[key][innerkey]);
 	                }
-	            }    
+	            } 
+
+	            thresholdSize = values.length;   
 
 	            var seriesName = key, 
 	            	color = chartColors[0];
@@ -53,8 +76,8 @@ exports.handler = (event, context, callback) => {
 	    if (payload.hasOwnProperty('threshold') && payload.threshold !== null){
 	        var color = chartColors[0];
 	        var thresholdArray = [];
-	        thresholdArray.length = values.length
-	        thresholdArray.fill(series.threshold);
+	        thresholdArray.length = thresholdSize;
+	        thresholdArray.fill(payload.threshold);
 	        series.push(
 	            {
 	                label: 'threshold',
@@ -81,7 +104,7 @@ exports.handler = (event, context, callback) => {
 							alertId: Id
 						});
 					} else {
-						reject();
+						reject('Could not generate graph');
 					}				
 				});
 			}); 
@@ -91,8 +114,19 @@ exports.handler = (event, context, callback) => {
 		promises.push(promise);
 	}
 
-	Promise.all(promises).then(function (resp, err) {
-		resp.forEach(result => response[result.alertId]=result.url)
+	Promise.all(promises).then(resp => {
+		resp.forEach(result => responseBody[result.alertId]=result.url)
+
+		var response = {
+	        "statusCode": 200,
+	        "headers": {
+	            "Content-Type": "application/json"
+	        },
+	        "body": JSON.stringify(responseBody),
+	        "isBase64Encoded": false
+	    };
 		callback(null,response);
-	})
+	}).catch(reason => {
+		callback(reason)
+	});
 };
