@@ -63,14 +63,15 @@ app.post("/graph", function(req, res) {
 	    if (payload.hasOwnProperty('threshold') && payload.threshold !== null){
 	        var color = chartColors[Math.floor(Math.random()*6)];
 	        var thresholdArray = [];
-	        thresholdArray.length = values.length
-	        thresholdArray.fill(series.threshold);
+	        thresholdArray.length = 61
+	        thresholdArray.fill(payload.threshold);
 	        series.push(
 	            {
 	                label: 'threshold',
 	                fill: false,
 	               	backgroundColor: color,
 	               	borderColor: color,
+	               	borderWidth: 1,
 	                data: thresholdArray    
 	            }
 	        )

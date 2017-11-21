@@ -3,6 +3,7 @@ const ChartjsNode = require('chartjs-node'),
 
 var s3 = new AWS.S3();
 var myChartOptions = {
+    elements:{ point: { radius: 0 } },
     responsive: true,
     title:{
         display:false

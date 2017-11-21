@@ -1,7 +1,7 @@
 const bodyParser = require("body-parser"),
 	graphService = require('./microservice');
 
-chartColors = ['rgb(255, 205, 86)','rgb(54, 162, 235)']
+chartColors = ['rgb(255, 205, 86)','rgb(54, 162, 235)','rgb(255, 0, 0)']
 
 exports.handler = (event, context, callback) => {
 	process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/lib';
@@ -74,7 +74,7 @@ exports.handler = (event, context, callback) => {
 	    }
 
 	    if (payload.hasOwnProperty('threshold') && payload.threshold !== null){
-	        var color = chartColors[0];
+	        var color = chartColors[2];
 	        var thresholdArray = [];
 	        thresholdArray.length = thresholdSize;
 	        thresholdArray.fill(payload.threshold);
@@ -84,6 +84,7 @@ exports.handler = (event, context, callback) => {
 	                fill: false,
 	               	backgroundColor: color,
 	               	borderColor: color,
+	               	borderWidth: 1,
 	                data: thresholdArray    
 	            }
 	        )
@@ -92,7 +93,8 @@ exports.handler = (event, context, callback) => {
 	    var annotationPosition = {}
 	    annotationPosition['peakPoint'] = timespan.findIndex(function(element){ return element == payload.detectionTime})
 	    annotationPosition['dataset'] = series.findIndex(function(element){ return element.label == 'Current'})	
-    //timespan is in seconds
+   		
+   		//timespan is in seconds
 	    timespan = timespan.map(x => x*1000);
 		
 		function createPromisse(xAxis, data, position, Id) {
