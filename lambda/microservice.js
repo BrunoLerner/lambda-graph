@@ -43,7 +43,7 @@ var myChartOptions = {
             display: true,
             scaleLabel: {
                 display: true,
-                labelString: 'Time',
+                labelString: 'Time (UTC)',
                 fontColor: 'rgba(0, 0, 0, 1)',
                 fontSize: 12
             }
