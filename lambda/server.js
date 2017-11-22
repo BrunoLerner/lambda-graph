@@ -11,21 +11,15 @@ exports.handler = (event, context, callback) => {
 		promises = [],
 		responseBody = {};
 
-	console.log('This is the raw event');
-	console.log(event);
-
-	console.log('This is the raw event body');
-	console.log(event.body);
-
 	try{
 		console.log('This is the event body parsed');
 		content = JSON.parse(content);
 		console.log('The parsing worked..' + content);
 	}catch(e){ 
 		console.log(e);
+		content = event.body;
 	}
 	
-	console.log("This is the content inside the alertId: " + content['1998247246']);
 	for (var alertId in content) {
 		// console.log(alertId)
 		// console.log('If we are here, it means that we entered the json loop')
@@ -55,12 +49,12 @@ exports.handler = (event, context, callback) => {
 	            	backgroundColor = chartColors[3];
 
 	            if (key == 'lastHourSeries'){
-	            	seriesName = 'Current';
+	            	seriesName = 'Events/Minute';
 	            	color = chartColors[1];
 	            	backgroundColor = chartColors[4]
 	            }
 	            else if (key == 'prevDaySeries'){
-	            	seriesName = 'Last Day';
+	            	seriesName = 'Baseline';
 	            	color = chartColors[0];
 	            	backgroundColor = chartColors[3]
 	            }
@@ -95,7 +89,7 @@ exports.handler = (event, context, callback) => {
 
 	    var annotationPosition = {}
 	    annotationPosition['peakPoint'] = timespan.findIndex(function(element){ return element == payload.detectionTime})
-	    annotationPosition['dataset'] = series.findIndex(function(element){ return element.label == 'Current'})	
+	    annotationPosition['dataset'] = series.findIndex(function(element){ return element.label == 'Events/Minute'})	
    		
    		//timespan is in seconds
 	    timespan = timespan.map(x => x*1000);
